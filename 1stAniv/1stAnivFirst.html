@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anniversary Quiz</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(to right, #f8cdda, #f5f7fa);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .container {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px;
+            max-width: 500px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .question {
+            font-size: 1.2em;
+            margin-bottom: 20px;
+        }
+
+        .options {
+            text-align: left;
+            margin: 15px 0;
+        }
+
+        .options label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .options input {
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: #d63384;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .btn:hover {
+            background: #b0266c;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .card {
+            margin-top: 20px;
+        }
+
+        .card img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 20px;
+            animation: zoomIn 1.5s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                transform: scale(0.8);
+                opacity: 0;
+            }
+            to {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="quiz">
+        <h1>Anniversary Quiz</h1>
+        <div class="question" id="question"></div>
+        <div class="options" id="options"></div>
+        <button class="btn" onclick="checkAnswer()">Submit</button>
+<br><br><br>
+        <div id="error-message" class="hidden"></div>
+    </div>
+
+    <div class="card hidden" id="result">
+<center>
+        <h1>Correct!! Galing ni Bibi ~</h1>
+<br><br><br>
+        <p>Hanapin ang next sign sa second floor likod ng sofa.</p>
+<center/>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                question: "What is the shape of the cranked vintage music you received?",
+                options: [
+                    { text: "Square", correct: true },
+                    { text: "Circle", correct: false },
+                    { text: "Rectangle", correct: false }
+                ]
+            }];
+
+        const errorMessages = [
+            "Ano ba yan Lili!",
+            "Grabe ka sakin bibi!",
+            "Mali!!!",
+            "Hmmmmm..",
+            "I see..",
+            "It's not.",
+            "Bakit ka ganyan bibi..",
+            "I see..",
+            "No bibi..",
+        ];
+
+        let currentQuestion = 0;
+
+        function loadQuestion() {
+            const questionElement = document.getElementById('question');
+            const optionsElement = document.getElementById('options');
+            const errorMessageElement = document.getElementById('error-message');
+
+            questionElement.textContent = questions[currentQuestion].question;
+            optionsElement.innerHTML = '';
+            errorMessageElement.classList.add('hidden');
+
+            questions[currentQuestion].options.forEach((option, index) => {
+                optionsElement.innerHTML += `
+                    <label>
+                        <input type="radio" name="answer" value="${option.correct}">
+                        ${option.text}
+                    </label>
+                `;
+            });
+        }
+
+        function checkAnswer() {
+            const selected = document.querySelector('input[name="answer"]:checked');
+            const errorMessageElement = document.getElementById('error-message');
+
+            if (!selected) {
+                alert('Please select an option!');
+                return;
+            }
+
+            if (selected.value === 'true') {
+                currentQuestion++;
+                if (currentQuestion < questions.length) {
+                    loadQuestion();
+                } else {
+                    document.getElementById('quiz').classList.add('hidden');
+                    document.getElementById('result').classList.remove('hidden');
+                }
+            } else {
+                const randomMessage = errorMessages[Math.floor(Math.random() * errorMessages.length)];
+                errorMessageElement.textContent = randomMessage;
+                errorMessageElement.classList.remove('hidden');
+            }
+        }
+
+        // Load the first question on page load
+        loadQuestion();
+    </script>
+</body>
+</html>
